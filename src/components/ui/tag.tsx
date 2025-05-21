@@ -12,13 +12,11 @@ const tagVariants = cva(
         default: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         primary: "bg-primary text-primary-foreground hover:bg-primary/90",
         outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        ai: {
-          blue: "bg-ai-blue/10 text-ai-blue hover:bg-ai-blue/20",
-          purple: "bg-ai-purple/10 text-ai-purple hover:bg-ai-purple/20",
-          pink: "bg-ai-pink/10 text-ai-pink hover:bg-ai-pink/20",
-          orange: "bg-ai-orange/10 text-ai-orange hover:bg-ai-orange/20",
-          green: "bg-ai-green/10 text-ai-green hover:bg-ai-green/20",
-        },
+        "ai-blue": "bg-ai-blue/10 text-ai-blue hover:bg-ai-blue/20",
+        "ai-purple": "bg-ai-purple/10 text-ai-purple hover:bg-ai-purple/20",
+        "ai-pink": "bg-ai-pink/10 text-ai-pink hover:bg-ai-pink/20",
+        "ai-orange": "bg-ai-orange/10 text-ai-orange hover:bg-ai-orange/20",
+        "ai-green": "bg-ai-green/10 text-ai-green hover:bg-ai-green/20",
       },
       size: {
         default: "h-6 px-2.5 py-0.5",
@@ -41,12 +39,18 @@ export interface TagProps
 
 const Tag = React.forwardRef<HTMLDivElement, TagProps>(
   ({ className, variant, size, to, ...props }, ref) => {
-    const Comp = to ? Link : "div";
-    const compProps = to ? { to } : {};
-
+    if (to) {
+      return (
+        <Link
+          to={to}
+          className={cn(tagVariants({ variant, size }), className)}
+          {...props}
+        />
+      );
+    }
+    
     return (
-      <Comp
-        {...compProps}
+      <div
         className={cn(tagVariants({ variant, size }), className)}
         ref={ref}
         {...props}

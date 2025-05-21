@@ -5,6 +5,8 @@ import { Tag } from "@/components/ui/tag";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+type ColorVariant = 'purple' | 'blue' | 'pink' | 'orange' | 'green';
+
 interface ToolCardProps {
   id: string;
   name: string;
@@ -16,7 +18,7 @@ interface ToolCardProps {
   image: string;
   className?: string;
   featured?: boolean;
-  colorVariant?: 'purple' | 'blue' | 'pink' | 'orange' | 'green';
+  colorVariant?: ColorVariant;
 }
 
 const ToolCard = ({ 
@@ -40,13 +42,13 @@ const ToolCard = ({
     green: "from-ai-green to-teal-500"
   };
 
-  const tagColorMap = {
+  const tagColorMap: Record<number, ColorVariant> = {
     0: 'blue',
     1: 'purple',
     2: 'pink',
     3: 'orange',
     4: 'green'
-  } as const;
+  };
   
   return (
     <Link to={`/tools/${id}`} className={cn("tool-card overflow-hidden flex flex-col", className)}>
@@ -70,7 +72,7 @@ const ToolCard = ({
           <Tag 
             to={`/categories/${categorySlug}`} 
             size="sm" 
-            variant={`ai.${colorVariant}` as any}
+            variant={`ai-${colorVariant}`}
           >
             {category}
           </Tag>
@@ -96,7 +98,7 @@ const ToolCard = ({
               key={tag} 
               to={`/tag/${tag.toLowerCase()}`}
               size="sm" 
-              variant={`ai.${tagColorMap[i % 5]}`}
+              variant={`ai-${tagColorMap[i % 5]}`}
             >
               {tag}
             </Tag>
@@ -111,3 +113,4 @@ const ToolCard = ({
 };
 
 export default ToolCard;
+export type { ToolCardProps, ColorVariant };

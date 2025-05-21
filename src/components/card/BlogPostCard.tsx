@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Tag } from "@/components/ui/tag";
 import { Calendar, Clock } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ColorVariant } from "./ToolCard";
 
 interface BlogPostCardProps {
   id: string;
@@ -31,13 +32,13 @@ const BlogPostCard = ({
   tags,
   className,
 }: BlogPostCardProps) => {
-  const tagColorMap = {
+  const tagColorMap: Record<number, ColorVariant> = {
     0: 'blue',
     1: 'purple',
     2: 'pink',
     3: 'orange',
     4: 'green'
-  } as const;
+  };
 
   return (
     <Link to={`/blog/${id}`} className={cn("blog-card flex flex-col rounded-lg overflow-hidden border border-border hover:shadow-md transition-all duration-200", className)}>
@@ -52,7 +53,7 @@ const BlogPostCard = ({
             <Tag 
               key={tag} 
               size="sm" 
-              variant={`ai.${tagColorMap[i % 5]}`}
+              variant={`ai-${tagColorMap[i % 5]}`}
               onClick={(e) => {
                 e.preventDefault();
                 // Tag link navigation would go here

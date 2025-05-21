@@ -1,4 +1,3 @@
-
 import { useParams } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -25,10 +24,12 @@ import {
   Share2,
   Flag,
   MessageSquare,
-  Check
+  Check,
+  Clock
 } from 'lucide-react';
 import { tools, blogPosts } from '@/data/mockData';
 import BlogPostCard from '@/components/card/BlogPostCard';
+import ToolCard from '@/components/card/ToolCard';
 
 // Mock reviews data
 const reviews = [
@@ -147,11 +148,11 @@ const ToolDetail = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <Tag size="sm" variant={`ai.${tool.colorVariant}`}>
+                  <Tag size="sm" variant={`ai-${tool.colorVariant}`}>
                     {tool.category}
                   </Tag>
                   {tool.featured && (
-                    <Tag size="sm" variant="ai.orange">Featured</Tag>
+                    <Tag size="sm" variant="ai-orange">Featured</Tag>
                   )}
                 </div>
                 
