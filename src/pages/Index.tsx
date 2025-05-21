@@ -8,6 +8,7 @@ import { Search, TrendingUp } from 'lucide-react';
 import CategoryIcon from '@/components/CategoryIcon';
 import ToolCard from '@/components/card/ToolCard';
 import BlogPostCard from '@/components/card/BlogPostCard';
+import ArticleWaterfall from '@/components/articles/ArticleWaterfall';
 import { categories, tools, blogPosts } from '@/data/mockData';
 
 const Index = () => {
@@ -107,6 +108,9 @@ const Index = () => {
             </TabsContent>
           </Tabs>
         </section>
+
+        {/* Latest Articles Waterfall */}
+        <ArticleWaterfall />
 
         {/* Newsletter Section */}
         <section className="bg-gradient-to-r from-ai-purple/10 to-ai-blue/10 rounded-xl p-8 text-center mb-8">

@@ -24,12 +24,11 @@ import {
   Share2,
   Flag,
   MessageSquare,
-  Check,
-  Clock
+  Check
 } from 'lucide-react';
 import { tools, blogPosts } from '@/data/mockData';
 import BlogPostCard from '@/components/card/BlogPostCard';
-import ToolCard from '@/components/card/ToolCard';
+import { ColorVariant } from '@/components/card/ToolCard';
 
 // Mock reviews data
 const reviews = [
@@ -138,6 +137,11 @@ const ToolDetail = () => {
     post.tags.some(tag => tool.tags.includes(tag))
   ).slice(0, 3);
 
+  // Helper function to convert colorVariant to the correct variant format for Tag component
+  const getTagVariant = (colorVariant: ColorVariant) => {
+    return `ai-${colorVariant}` as "ai-blue" | "ai-purple" | "ai-pink" | "ai-orange" | "ai-green";
+  };
+
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
@@ -148,7 +152,7 @@ const ToolDetail = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <Tag size="sm" variant={`ai-${tool.colorVariant}`}>
+                  <Tag size="sm" variant={getTagVariant(tool.colorVariant as ColorVariant)}>
                     {tool.category}
                   </Tag>
                   {tool.featured && (
@@ -525,6 +529,23 @@ const ToolDetail = () => {
           </div>
         </div>
       </div>
+      
+      <section className="mt-12">
+        <h2 className="text-2xl font-semibold mb-6">Similar Tools</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {tools
+            .filter(t => 
+              t.id !== tool.id && 
+              (t.categorySlug === tool.categorySlug || 
+               t.tags.some(tag => tool.tags.includes(tag)))
+            )
+            .slice(0, 4)
+            .map(similarTool => (
+              <ToolCard key={similarTool.id} {...similarTool} />
+            ))
+          }
+        </div>
+      </section>
     </Layout>
   );
 };
