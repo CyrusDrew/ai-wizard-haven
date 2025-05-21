@@ -44,7 +44,7 @@ const Tag = React.forwardRef<HTMLDivElement, TagProps>(
         <Link
           to={to}
           className={cn(tagVariants({ variant, size }), className)}
-          {...props}
+          {...props as any} // Using type assertion to resolve the incompatible type error
         />
       );
     }
