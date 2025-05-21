@@ -64,7 +64,7 @@ const reviews = [
     },
     rating: 5,
     date: 'May 5, 2025',
-    content: 'The customer service is exceptional, and the AI performs better than any other solution I've tried.',
+    content: "The customer service is exceptional, and the AI performs better than any other solution I've tried.",
     helpful: 12,
     notHelpful: 1,
   },

@@ -192,7 +192,7 @@ export const blogPosts = [
 export const forumTopics = [
   {
     id: 'topic1',
-    title: 'What's the best AI tool for generating product descriptions?',
+    title: "What's the best AI tool for generating product descriptions?",
     category: 'Usage Tips',
     author: {
       name: 'James Wilson',
