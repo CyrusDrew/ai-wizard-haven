@@ -109,7 +109,7 @@ const Index = () => {
           </Tabs>
         </section>
 
-        {/* Latest Articles Waterfall */}
+        {/* Latest Articles Waterfall - Now moved after the featured tools section */}
         <ArticleWaterfall />
 
         {/* Newsletter Section */}
