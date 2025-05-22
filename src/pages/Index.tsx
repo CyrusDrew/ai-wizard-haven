@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -11,13 +11,44 @@ import ToolCard from '@/components/card/ToolCard';
 import BlogPostCard from '@/components/card/BlogPostCard';
 import ArticleWaterfall from '@/components/articles/ArticleWaterfall';
 import { categories, tools, blogPosts } from '@/data/mockData';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { useEffect } from 'react';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('tools');
   const [searchQuery, setSearchQuery] = useState('');
-
+  const featuredCarouselRef = useRef(null);
+  const moreToolsCarouselRef = useRef(null);
+  
   const featuredTools = tools.filter(tool => tool.featured);
   const popularCategories = categories.slice(0, 8);
+  const moreTools = tools.filter(tool => !tool.featured);
+
+  // Auto scroll the carousels every 4 seconds
+  useEffect(() => {
+    const featuredInterval = setInterval(() => {
+      if (featuredCarouselRef.current && featuredCarouselRef.current.scrollNext) {
+        featuredCarouselRef.current.scrollNext();
+      }
+    }, 4000);
+    
+    const moreToolsInterval = setInterval(() => {
+      if (moreToolsCarouselRef.current && moreToolsCarouselRef.current.scrollNext) {
+        moreToolsCarouselRef.current.scrollNext();
+      }
+    }, 5000);
+    
+    return () => {
+      clearInterval(featuredInterval);
+      clearInterval(moreToolsInterval);
+    };
+  }, []);
 
   return (
     <Layout>
@@ -78,21 +109,52 @@ const Index = () => {
             </div>
 
             <TabsContent value="tools">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {featuredTools.map((tool) => (
-                  <ToolCard key={tool.id} {...tool} />
-                ))}
-              </div>
-              <div className="mt-12 mb-8">
-                <h3 className="text-xl font-semibold mb-6">Explore More Tools</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {tools.filter(tool => !tool.featured).slice(0, 4).map((tool) => (
-                    <ToolCard key={tool.id} {...tool} />
-                  ))}
-                </div>
+              {/* Featured Tools Carousel */}
+              <div className="mb-8">
+                <Carousel 
+                  className="w-full" 
+                  setApi={(api) => {
+                    featuredCarouselRef.current = api;
+                  }}
+                >
+                  <CarouselContent className="-ml-4">
+                    {featuredTools.map((tool) => (
+                      <CarouselItem key={tool.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                        <ToolCard {...tool} className="h-full" />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <div className="hidden md:flex">
+                    <CarouselPrevious />
+                    <CarouselNext />
+                  </div>
+                </Carousel>
               </div>
               
-              {/* Latest Articles Waterfall - Moved here after the featured tools section */}
+              {/* Explore More Tools Carousel */}
+              <div className="mt-12 mb-8">
+                <h3 className="text-xl font-semibold mb-6">Explore More Tools</h3>
+                <Carousel 
+                  className="w-full"
+                  setApi={(api) => {
+                    moreToolsCarouselRef.current = api;
+                  }}
+                >
+                  <CarouselContent className="-ml-4">
+                    {moreTools.slice(0, 8).map((tool) => (
+                      <CarouselItem key={tool.id} className="pl-4 md:basis-1/3 lg:basis-1/4">
+                        <ToolCard {...tool} className="h-full" />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <div className="hidden md:flex">
+                    <CarouselPrevious />
+                    <CarouselNext />
+                  </div>
+                </Carousel>
+              </div>
+              
+              {/* Latest Articles Waterfall after featured tools */}
               <ArticleWaterfall />
             </TabsContent>
 

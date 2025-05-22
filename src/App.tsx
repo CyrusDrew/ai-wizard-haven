@@ -11,10 +11,15 @@ import ToolDetail from "./pages/ToolDetail";
 import Forum from "./pages/Forum";
 import ForumPostDetail from "./pages/ForumPostDetail";
 import Profile from "./pages/Profile";
-import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import ArticleDetail from "./pages/ArticleDetail";
 import SubmitTool from "./pages/SubmitTool";
+
+// Auth Pages
+import Login from "./pages/Auth/Login";
+import Register from "./pages/Auth/Register";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
+import ResetPassword from "./pages/Auth/ResetPassword";
 
 const queryClient = new QueryClient();
 
@@ -33,8 +38,14 @@ const App = () => (
           <Route path="/forum" element={<Forum />} />
           <Route path="/forum/topic/:id" element={<ForumPostDetail />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
           <Route path="/submit-tool" element={<SubmitTool />} />
+          
+          {/* Auth Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

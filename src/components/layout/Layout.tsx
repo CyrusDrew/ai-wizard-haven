@@ -10,8 +10,7 @@ import {
   Bell,
   Home, 
   Grid, 
-  MessageSquare, 
-  Settings 
+  MessageSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -60,6 +59,16 @@ const Layout = ({ children }: LayoutProps) => {
             </Link>
           </div>
 
+          {/* Top Navigation Menu - Desktop */}
+          {!isMobile && (
+            <nav className="hidden md:flex items-center space-x-1">
+              <TopNavItem to="/" icon={<Home size={16} />} label="Home" />
+              <TopNavItem to="/categories" icon={<Grid size={16} />} label="Categories" />
+              <TopNavItem to="/forum" icon={<MessageSquare size={16} />} label="Community" />
+              <TopNavItem to="/profile" icon={<User size={16} />} label="Profile" />
+            </nav>
+          )}
+
           {/* Search bar */}
           <div className="hidden md:flex items-center max-w-md w-full relative">
             <Input 
@@ -73,9 +82,11 @@ const Layout = ({ children }: LayoutProps) => {
           {/* Actions */}
           <div className="flex items-center space-x-2">
             {!isMobile && (
-              <Button variant="outline" size="sm">
-                <Search size={18} className="md:hidden" />
-                <span className="hidden md:inline">Submit Tool</span>
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/submit-tool">
+                  <Search size={18} className="md:hidden" />
+                  <span className="hidden md:inline">Submit Tool</span>
+                </Link>
               </Button>
             )}
             
@@ -101,9 +112,6 @@ const Layout = ({ children }: LayoutProps) => {
                     <DropdownMenuItem asChild>
                       <Link to="/profile">Profile</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/settings">Settings</Link>
-                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => setIsLoggedIn(false)}>
                       Log out
@@ -112,10 +120,22 @@ const Layout = ({ children }: LayoutProps) => {
                 </DropdownMenu>
               </>
             ) : (
-              <Button variant="default" size="sm" onClick={() => setIsLoggedIn(true)}>
-                <LogIn size={18} className="mr-2" /> 
-                <span>Sign In</span>
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="default" size="sm">
+                    <LogIn size={18} className="mr-2" /> 
+                    <span>Sign In</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link to="/login">Login</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/register">Register</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
           </div>
         </div>
@@ -140,41 +160,18 @@ const Layout = ({ children }: LayoutProps) => {
             <NavItem to="/profile" icon={<User size={20} />} label="Profile" />
             
             <div className="mt-auto pt-6 border-t">
-              <Button className="w-full">Submit Tool</Button>
+              <Button className="w-full" asChild>
+                <Link to="/submit-tool">Submit Tool</Link>
+              </Button>
             </div>
           </nav>
         </div>
       )}
 
-      {/* Main content with sidebar on desktop */}
-      <div className="flex flex-1">
-        {!isMobile && (
-          <aside className="hidden md:block w-56 lg:w-64 border-r border-border p-4 space-y-6">
-            <nav className="space-y-1">
-              <NavItem to="/" icon={<Home size={20} />} label="Home" />
-              <NavItem to="/categories" icon={<Grid size={20} />} label="Categories" />
-              <NavItem to="/forum" icon={<MessageSquare size={20} />} label="Community" />
-              <NavItem to="/profile" icon={<User size={20} />} label="Profile" />
-              <NavItem to="/settings" icon={<Settings size={20} />} label="Settings" />
-            </nav>
-            
-            <div className="pt-4 border-t">
-              <h3 className="font-medium mb-2 text-sm text-muted-foreground">Popular Tags</h3>
-              <div className="flex flex-wrap gap-1">
-                <TagPill label="ChatGPT" />
-                <TagPill label="Midjourney" />
-                <TagPill label="AI Writing" />
-                <TagPill label="Stable Diffusion" />
-                <TagPill label="GPT-4" />
-              </div>
-            </div>
-          </aside>
-        )}
-
-        <main className="flex-1 min-w-0">
-          {children}
-        </main>
-      </div>
+      {/* Main content */}
+      <main className="flex-1">
+        {children}
+      </main>
 
       {/* Footer */}
       <footer className="border-t border-border bg-muted/30">
@@ -215,6 +212,24 @@ const Layout = ({ children }: LayoutProps) => {
         </div>
       </footer>
     </div>
+  );
+};
+
+const TopNavItem = ({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) => {
+  return (
+    <NavLink 
+      to={to} 
+      className={({ isActive }) => 
+        `flex items-center space-x-1 px-3 py-2 rounded-md text-sm ${
+          isActive 
+            ? "bg-primary text-primary-foreground" 
+            : "hover:bg-muted/80"
+        }`
+      }
+    >
+      {icon}
+      <span>{label}</span>
+    </NavLink>
   );
 };
 
