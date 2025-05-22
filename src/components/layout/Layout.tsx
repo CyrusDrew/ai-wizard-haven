@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { 
@@ -10,7 +9,8 @@ import {
   Bell,
   Home, 
   Grid, 
-  MessageSquare
+  MessageSquare,
+  UserPlus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,10 +35,35 @@ const Layout = ({ children }: LayoutProps) => {
   const isMobile = useIsMobile();
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState('User');
 
   useEffect(() => {
+    // Check localStorage for login state
+    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const storedUsername = localStorage.getItem('username');
+    
+    setIsLoggedIn(loggedIn);
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+    
     setIsMenuOpen(false);
   }, [location.pathname]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username');
+    setIsLoggedIn(false);
+    setUsername('User');
+    
+    // Navigate to home if needed
+    if (location.pathname === '/profile') {
+      window.location.href = '/';
+    } else {
+      // Force reload to update UI
+      window.location.reload();
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -81,15 +106,6 @@ const Layout = ({ children }: LayoutProps) => {
 
           {/* Actions */}
           <div className="flex items-center space-x-2">
-            {!isMobile && (
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/submit-tool">
-                  <Search size={18} className="md:hidden" />
-                  <span className="hidden md:inline">Submit Tool</span>
-                </Link>
-              </Button>
-            )}
-            
             {isLoggedIn ? (
               <>
                 <Button variant="ghost" size="icon" className="relative">
@@ -99,11 +115,12 @@ const Layout = ({ children }: LayoutProps) => {
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="rounded-full">
+                    <Button variant="ghost" size="sm" className="flex items-center gap-2">
                       <Avatar className="w-8 h-8">
                         <AvatarImage src="/placeholder.svg" />
-                        <AvatarFallback>U</AvatarFallback>
+                        <AvatarFallback>{username.charAt(0).toUpperCase()}</AvatarFallback>
                       </Avatar>
+                      <span className="hidden md:inline">{username}</span>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
@@ -113,29 +130,27 @@ const Layout = ({ children }: LayoutProps) => {
                       <Link to="/profile">Profile</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => setIsLoggedIn(false)}>
+                    <DropdownMenuItem onClick={handleLogout}>
                       Log out
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </>
             ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="default" size="sm">
-                    <LogIn size={18} className="mr-2" /> 
-                    <span>Sign In</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem asChild>
-                    <Link to="/login">Login</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/register">Register</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div className="flex items-center space-x-2">
+                <Button variant="outline" size="sm" asChild>
+                  <Link to="/login">
+                    <LogIn size={16} className="mr-1" /> 
+                    <span>Login</span>
+                  </Link>
+                </Button>
+                <Button variant="default" size="sm" asChild>
+                  <Link to="/register">
+                    <UserPlus size={16} className="mr-1" /> 
+                    <span>Register</span>
+                  </Link>
+                </Button>
+              </div>
             )}
           </div>
         </div>
@@ -222,8 +237,8 @@ const TopNavItem = ({ to, icon, label }: { to: string; icon: React.ReactNode; la
       className={({ isActive }) => 
         `flex items-center space-x-1 px-3 py-2 rounded-md text-sm ${
           isActive 
-            ? "bg-primary text-primary-foreground" 
-            : "hover:bg-muted/80"
+            ? "text-primary font-medium" 
+            : "hover:bg-muted/50"
         }`
       }
     >

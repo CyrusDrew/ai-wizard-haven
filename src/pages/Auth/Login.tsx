@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
@@ -28,7 +27,15 @@ const Login = () => {
         title: "Logged in successfully",
         description: "Welcome back to AIExplorer!",
       });
+      
+      // Set mock user data to simulate login
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('username', email.split('@')[0]);
+      
       navigate('/');
+      
+      // Force reload to update header state
+      window.location.reload();
     }, 1500);
   };
 
@@ -42,7 +49,15 @@ const Login = () => {
         title: "Logged in with Google",
         description: "Welcome to AIExplorer!",
       });
+      
+      // Set mock user data to simulate login
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('username', 'GoogleUser');
+      
       navigate('/');
+      
+      // Force reload to update header state
+      window.location.reload();
     }, 1500);
   };
 
@@ -56,7 +71,15 @@ const Login = () => {
         title: "Logged in with GitHub",
         description: "Welcome to AIExplorer!",
       });
+      
+      // Set mock user data to simulate login
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('username', 'GitHubUser');
+      
       navigate('/');
+      
+      // Force reload to update header state
+      window.location.reload();
     }, 1500);
   };
 
