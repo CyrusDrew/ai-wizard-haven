@@ -399,7 +399,7 @@ export const blogPosts = [
   {
     id: 'post23',
     title: 'Personal AI Assistants: Comparing the Market Leaders',
-    excerpt: 'A detailed comparison of personal AI assistants and how they're changing productivity and daily life.',
+    excerpt: 'A detailed comparison of personal AI assistants and how they\'re changing productivity and daily life.',
     author: {
       name: 'Mark Wilson',
       avatar: '',
