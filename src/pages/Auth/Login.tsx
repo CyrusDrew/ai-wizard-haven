@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { GitHub, Mail, LogIn } from 'lucide-react';
+import { Github, Mail, LogIn } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 
 const Login = () => {
@@ -100,7 +100,7 @@ const Login = () => {
                 Google
               </Button>
               <Button variant="outline" className="w-full" onClick={handleGithubLogin} disabled={isLoading}>
-                <GitHub className="mr-2 h-4 w-4" /> GitHub
+                <Github className="mr-2 h-4 w-4" /> GitHub
               </Button>
             </div>
             

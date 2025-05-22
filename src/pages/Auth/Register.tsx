@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { GitHub, UserPlus } from 'lucide-react';
+import { Github, UserPlus } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 
 const Register = () => {
@@ -123,7 +123,7 @@ const Register = () => {
                 Google
               </Button>
               <Button variant="outline" className="w-full" onClick={handleGithubRegister} disabled={isLoading}>
-                <GitHub className="mr-2 h-4 w-4" /> GitHub
+                <Github className="mr-2 h-4 w-4" /> GitHub
               </Button>
             </div>
             
