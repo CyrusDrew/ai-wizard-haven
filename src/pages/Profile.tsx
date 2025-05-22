@@ -28,9 +28,17 @@ import {
   Heart,
   Edit,
   Upload,
-  Trash
+  Trash,
+  Shield,
+  Palette,
+  Globe,
+  LifeBuoy,
+  CreditCard,
+  Users,
+  LogOut
 } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // Mock user data
 const userData = {
@@ -46,6 +54,7 @@ const userData = {
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [activeSettingsTab, setActiveSettingsTab] = useState('account');
 
   return (
     <Layout>
@@ -114,6 +123,7 @@ const Profile = () => {
                 <TabsTrigger value="activity">Activity</TabsTrigger>
                 <TabsTrigger value="bookmarks">Bookmarks</TabsTrigger>
                 <TabsTrigger value="comments">Comments</TabsTrigger>
+                <TabsTrigger value="settings">Settings</TabsTrigger>
               </TabsList>
               
               <TabsContent value="activity" className="space-y-6">
@@ -230,6 +240,314 @@ const Profile = () => {
                   />
                 </div>
               </TabsContent>
+              
+              <TabsContent value="settings" className="space-y-6">
+                <Tabs defaultValue={activeSettingsTab} onValueChange={setActiveSettingsTab} className="w-full">
+                  <div className="flex border-b overflow-x-auto pb-px">
+                    <TabsList className="inline-flex h-9 items-center justify-center rounded-none bg-transparent p-0">
+                      <TabsTrigger
+                        value="account"
+                        className="inline-flex items-center justify-center whitespace-nowrap rounded-none border-b-2 border-b-transparent bg-transparent px-4 py-1 pb-3 pt-2 text-sm font-medium ring-offset-background transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                      >
+                        <User className="mr-2 h-4 w-4" />
+                        Account
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="notifications"
+                        className="inline-flex items-center justify-center whitespace-nowrap rounded-none border-b-2 border-b-transparent bg-transparent px-4 py-1 pb-3 pt-2 text-sm font-medium ring-offset-background transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                      >
+                        <Bell className="mr-2 h-4 w-4" />
+                        Notifications
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="privacy"
+                        className="inline-flex items-center justify-center whitespace-nowrap rounded-none border-b-2 border-b-transparent bg-transparent px-4 py-1 pb-3 pt-2 text-sm font-medium ring-offset-background transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                      >
+                        <Shield className="mr-2 h-4 w-4" />
+                        Privacy & Security
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="appearance"
+                        className="inline-flex items-center justify-center whitespace-nowrap rounded-none border-b-2 border-b-transparent bg-transparent px-4 py-1 pb-3 pt-2 text-sm font-medium ring-offset-background transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                      >
+                        <Palette className="mr-2 h-4 w-4" />
+                        Appearance
+                      </TabsTrigger>
+                    </TabsList>
+                  </div>
+
+                  <TabsContent value="account" className="space-y-6 pt-6">
+                    <div>
+                      <h3 className="text-lg font-medium">Account Settings</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Update your account settings and manage your preferences
+                      </p>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Display Name</label>
+                        <Input defaultValue={userData.name} />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Email Address</label>
+                        <Input defaultValue={userData.email} disabled />
+                        <p className="text-xs text-muted-foreground">
+                          Your email address is used for notifications and sign-in
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Interface Language</label>
+                        <select className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                          <option value="en-US">English (United States)</option>
+                          <option value="es">Español</option>
+                          <option value="fr">Français</option>
+                          <option value="de">Deutsch</option>
+                          <option value="zh">中文</option>
+                          <option value="ja">日本語</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <label className="text-sm font-medium">Two-Factor Authentication</label>
+                            <p className="text-xs text-muted-foreground">
+                              Add an extra layer of security to your account
+                            </p>
+                          </div>
+                          <Switch />
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <label className="text-sm font-medium">Allow Mentions</label>
+                            <p className="text-xs text-muted-foreground">
+                              Let other users mention you in comments and posts
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 pb-2 border-t">
+                      <Button variant="destructive">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Log Out
+                      </Button>
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="notifications" className="space-y-6 pt-6">
+                    <div>
+                      <h3 className="text-lg font-medium">Notification Preferences</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Manage how you receive notifications and alerts
+                      </p>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="space-y-4">
+                        <h4 className="text-sm font-semibold">Email Notifications</h4>
+
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <label className="text-sm font-medium">Tool Updates</label>
+                              <p className="text-xs text-muted-foreground">
+                                Receive updates when tools you follow get updated
+                              </p>
+                            </div>
+                            <Switch defaultChecked />
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <label className="text-sm font-medium">New Articles</label>
+                              <p className="text-xs text-muted-foreground">
+                                Be notified about new articles and tutorials
+                              </p>
+                            </div>
+                            <Switch defaultChecked />
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <label className="text-sm font-medium">Comment Replies</label>
+                              <p className="text-xs text-muted-foreground">
+                                Get notified when someone replies to your comment
+                              </p>
+                            </div>
+                            <Switch defaultChecked />
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <label className="text-sm font-medium">Weekly Newsletter</label>
+                              <p className="text-xs text-muted-foreground">
+                                Weekly digest of top AI tools and articles
+                              </p>
+                            </div>
+                            <Switch defaultChecked />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <h4 className="text-sm font-semibold">Push Notifications</h4>
+
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <label className="text-sm font-medium">Enable Push Notifications</label>
+                              <p className="text-xs text-muted-foreground">
+                                Allow browser notifications from this site
+                              </p>
+                            </div>
+                            <Switch />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="privacy" className="space-y-6 pt-6">
+                    <div>
+                      <h3 className="text-lg font-medium">Privacy & Security</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Manage your privacy settings and account security
+                      </p>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="space-y-4">
+                        <h4 className="text-sm font-semibold">Privacy Options</h4>
+
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <label className="text-sm font-medium">Public Profile</label>
+                              <p className="text-xs text-muted-foreground">
+                                Allow others to see your profile information
+                              </p>
+                            </div>
+                            <Switch defaultChecked />
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <label className="text-sm font-medium">Show Email Address</label>
+                              <p className="text-xs text-muted-foreground">
+                                Make your email visible to other users
+                              </p>
+                            </div>
+                            <Switch />
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <label className="text-sm font-medium">Activity Visibility</label>
+                              <p className="text-xs text-muted-foreground">
+                                Allow others to see your activity on the platform
+                              </p>
+                            </div>
+                            <Switch defaultChecked />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <h4 className="text-sm font-semibold">Security</h4>
+
+                        <div className="space-y-4">
+                          <Button variant="outline" className="w-full justify-start">
+                            <Lock className="mr-2 h-4 w-4" />
+                            Change Password
+                          </Button>
+                          
+                          <Button variant="outline" className="w-full justify-start">
+                            <Shield className="mr-2 h-4 w-4" />
+                            Active Sessions
+                          </Button>
+                          
+                          <Button variant="outline" className="w-full justify-start">
+                            <Download className="mr-2 h-4 w-4" />
+                            Download Your Data
+                          </Button>
+                          
+                          <Button variant="outline" className="w-full justify-start text-destructive">
+                            <Trash className="mr-2 h-4 w-4" />
+                            Delete Account
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="appearance" className="space-y-6 pt-6">
+                    <div>
+                      <h3 className="text-lg font-medium">Appearance</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Customize the look and feel of the application
+                      </p>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Theme</label>
+                        <div className="grid grid-cols-3 gap-2">
+                          <div className="flex items-center space-x-2">
+                            <input type="radio" id="light" name="theme" className="form-radio" checked />
+                            <label htmlFor="light" className="text-sm cursor-pointer">Light</label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input type="radio" id="dark" name="theme" className="form-radio" />
+                            <label htmlFor="dark" className="text-sm cursor-pointer">Dark</label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input type="radio" id="system" name="theme" className="form-radio" />
+                            <label htmlFor="system" className="text-sm cursor-pointer">System</label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Font Size</label>
+                        <select className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                          <option value="sm">Small</option>
+                          <option value="md" selected>Medium</option>
+                          <option value="lg">Large</option>
+                          <option value="xl">Extra Large</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <label className="text-sm font-medium">Reduce Animations</label>
+                            <p className="text-xs text-muted-foreground">
+                              Minimize animations for better performance
+                            </p>
+                          </div>
+                          <Switch />
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <label className="text-sm font-medium">Compact View</label>
+                            <p className="text-xs text-muted-foreground">
+                              Show more content with less spacing
+                            </p>
+                          </div>
+                          <Switch />
+                        </div>
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </TabsContent>
             </Tabs>
           </div>
           
@@ -262,14 +580,6 @@ const Profile = () => {
                     </div>
                     <Switch />
                   </div>
-                </div>
-                
-                <div className="border-t mt-4 pt-4">
-                  <Button variant="outline" className="w-full" asChild>
-                    <a href="/settings">
-                      <Settings size={16} className="mr-2" /> Advanced Settings
-                    </a>
-                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -311,13 +621,13 @@ const Profile = () => {
                 </h3>
                 <div className="space-y-4">
                   <Button variant="outline" className="w-full justify-start text-left" asChild>
-                    <a href="/settings/password">Change Password</a>
+                    <Link to="/profile?tab=settings">Change Password</Link>
                   </Button>
                   <Button variant="outline" className="w-full justify-start text-left" asChild>
-                    <a href="/settings/sessions">Active Sessions</a>
+                    <Link to="/profile?tab=settings">Active Sessions</Link>
                   </Button>
                   <Button variant="outline" className="w-full justify-start text-left" asChild>
-                    <a href="/settings/data">Download Your Data</a>
+                    <Link to="/profile?tab=settings">Download Your Data</Link>
                   </Button>
                   <Button variant="outline" className="w-full justify-start text-destructive text-left">
                     Delete Account
@@ -331,6 +641,26 @@ const Profile = () => {
     </Layout>
   );
 };
+
+const Download = ({ className, ...props }: React.ComponentProps<typeof User>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    {...props}
+  >
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="7 10 12 15 17 10" />
+    <line x1="12" y1="15" x2="12" y2="3" />
+  </svg>
+);
 
 const EmptyState = ({ title, description, icon }: { title: string; description: string; icon: React.ReactNode }) => {
   return (

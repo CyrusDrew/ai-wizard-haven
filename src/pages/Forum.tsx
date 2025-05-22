@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Search, MessageSquare, Flame, Plus } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { forumTopics } from '@/data/mockData';
 
 const Forum = () => {
@@ -134,9 +135,9 @@ const TopicCard = ({ topic }: { topic: any }) => {
           <div className="flex-1 min-w-0">
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
               <h3 className="font-medium text-lg break-words">
-                <a href={`/forum/topic/${topic.id}`} className="hover:text-primary">
+                <Link to={`/forum/topic/${topic.id}`} className="hover:text-primary">
                   {topic.title}
-                </a>
+                </Link>
               </h3>
               {topic.isHot && (
                 <Badge className="ml-0 sm:ml-2 w-fit bg-ai-orange border-0 text-white">

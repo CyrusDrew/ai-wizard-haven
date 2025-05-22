@@ -1,22 +1,22 @@
 
-import { Link } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { Tag } from "@/components/ui/tag";
-import { Calendar, Clock } from "lucide-react";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ColorVariant } from "./ToolCard";
+import { cn } from "@/lib/utils";
+import { Calendar, Clock } from "lucide-react";
+import { Link } from "react-router-dom";
 
-interface BlogPostCardProps {
+interface BlogPostProps {
   id: string;
   title: string;
   excerpt: string;
+  image?: string;
   author: {
     name: string;
-    avatar?: string;
+    avatar: string;
   };
   date: string;
   readTime: string;
-  image?: string;
   tags: string[];
   className?: string;
 }
@@ -25,64 +25,72 @@ const BlogPostCard = ({
   id,
   title,
   excerpt,
+  image,
   author,
   date,
   readTime,
-  image,
   tags,
   className,
-}: BlogPostCardProps) => {
-  const tagColorMap: Record<number, ColorVariant> = {
-    0: 'blue',
-    1: 'purple',
-    2: 'pink',
-    3: 'orange',
-    4: 'green'
-  };
-
+}: BlogPostProps) => {
   return (
-    <Link to={`/blog/${id}`} className={cn("blog-card flex flex-col rounded-lg overflow-hidden border border-border hover:shadow-md transition-all duration-200", className)}>
-      {image && (
-        <div className="h-48 overflow-hidden">
-          <img src={image} alt={title} className="w-full h-full object-cover" />
+    <Card className={cn("overflow-hidden transition-all hover:shadow-md", className)}>
+      <Link to={`/articles/${id}`} className="block">
+        <div className="aspect-video bg-muted">
+          <img
+            src={image || "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=800&q=80"}
+            alt={title}
+            className="h-full w-full object-cover transition-transform hover:scale-105"
+          />
         </div>
-      )}
-      <div className="p-5 flex-grow flex flex-col">
-        <div className="flex flex-wrap gap-1 mb-3">
-          {tags.slice(0, 2).map((tag, i) => (
-            <Tag 
-              key={tag} 
-              size="sm" 
-              variant={`ai-${tagColorMap[i % 5]}`}
-              onClick={(e) => {
-                e.preventDefault();
-                // Tag link navigation would go here
-              }}
-            >
-              {tag}
-            </Tag>
-          ))}
-        </div>
-        <h3 className="font-semibold text-xl mb-2 line-clamp-2">{title}</h3>
-        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{excerpt}</p>
-        <div className="flex items-center justify-between mt-auto pt-3 border-t">
-          <div className="flex items-center">
-            <Avatar className="h-6 w-6 mr-2">
-              <AvatarImage src={author.avatar} alt={author.name} />
-              <AvatarFallback>{author.name[0]}</AvatarFallback>
-            </Avatar>
-            <span className="text-sm font-medium">{author.name}</span>
+      </Link>
+      
+      <CardContent className="p-5">
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2 mb-2">
+            {tags.slice(0, 2).map((tag) => (
+              <Badge key={tag} variant="secondary" className="font-normal">
+                {tag}
+              </Badge>
+            ))}
+            {tags.length > 2 && (
+              <Badge variant="outline" className="font-normal">
+                +{tags.length - 2}
+              </Badge>
+            )}
           </div>
-          <div className="flex items-center text-muted-foreground text-xs">
-            <Calendar size={14} className="mr-1" />
-            <span>{date}</span>
-            <span className="mx-1">•</span>
-            <Clock size={14} className="mr-1" />
-            <span>{readTime}</span>
-          </div>
+          
+          <Link to={`/articles/${id}`} className="block">
+            <h3 className="font-semibold text-xl line-clamp-2 hover:text-primary transition-colors">
+              {title}
+            </h3>
+          </Link>
+          
+          <p className="text-muted-foreground line-clamp-3 text-sm">
+            {excerpt}
+          </p>
         </div>
-      </div>
-    </Link>
+      </CardContent>
+      
+      <CardFooter className="px-5 py-4 border-t bg-muted/10 flex flex-wrap justify-between items-center">
+        <div className="flex items-center gap-3">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={author.avatar} alt={author.name} />
+            <AvatarFallback>{author.name[0]}</AvatarFallback>
+          </Avatar>
+          <div className="text-sm font-medium">{author.name}</div>
+        </div>
+        <div className="flex items-center text-xs text-muted-foreground gap-3">
+          <span className="flex items-center gap-1">
+            <Calendar size={14} />
+            {date}
+          </span>
+          <span className="flex items-center gap-1">
+            <Clock size={14} />
+            {readTime}
+          </span>
+        </div>
+      </CardFooter>
+    </Card>
   );
 };
 

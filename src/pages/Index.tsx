@@ -4,7 +4,8 @@ import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { Search, TrendingUp } from 'lucide-react';
+import { Search, TrendingUp, Plus } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import CategoryIcon from '@/components/CategoryIcon';
 import ToolCard from '@/components/card/ToolCard';
 import BlogPostCard from '@/components/card/BlogPostCard';
@@ -29,7 +30,7 @@ const Index = () => {
           <p className="text-xl text-muted-foreground mx-auto max-w-2xl mb-8">
             Your ultimate guide to exploring the best AI tools and tutorials to enhance your workflow and creativity.
           </p>
-          <div className="relative max-w-xl mx-auto">
+          <div className="relative max-w-xl mx-auto mb-6">
             <Input
               type="text"
               placeholder="Search for AI tools, tutorials, or topics..."
@@ -39,6 +40,12 @@ const Index = () => {
             />
             <Search size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           </div>
+          <Button asChild className="mt-2">
+            <Link to="/submit-tool" className="flex items-center gap-2">
+              <Plus size={16} />
+              Submit an AI Tool
+            </Link>
+          </Button>
         </section>
 
         {/* Categories Section - "Golden Area" with icons */}
@@ -46,7 +53,7 @@ const Index = () => {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-semibold">Popular Categories</h2>
             <Button variant="outline" asChild>
-              <a href="/categories">View All Categories</a>
+              <Link to="/categories">View All Categories</Link>
             </Button>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
