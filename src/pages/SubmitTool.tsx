@@ -33,45 +33,61 @@ import { Upload, Info, AlertCircle } from 'lucide-react';
 import { categories } from '@/data/mockData';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+
+// Define the form validation schema
+const formSchema = z.object({
+  name: z.string().min(2, { message: "Tool name must be at least 2 characters." }),
+  website: z.string().url({ message: "Please enter a valid URL." }),
+  description: z.string().min(100, { message: "Description must be at least 100 characters." }),
+  category: z.string().min(1, { message: "Please select a category." }),
+  tags: z.string().optional(),
+  priceModel: z.string(),
+  hasAPI: z.boolean().default(false),
+  hasDemo: z.boolean().default(false),
+  contactEmail: z.string().email({ message: "Please enter a valid email address." }),
+  termsAgreed: z.boolean().refine(val => val === true, { 
+    message: "You must agree to the terms to submit a tool." 
+  })
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 const SubmitTool = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    website: '',
-    description: '',
-    category: '',
-    tags: '',
-    priceModel: 'freemium',
-    hasAPI: false,
-    hasDemo: false,
-    logo: null as File | null,
-    screenshot: null as File | null,
-    contactEmail: '',
-    termsAgreed: false
+  const [logo, setLogo] = useState<File | null>(null);
+  const [screenshot, setScreenshot] = useState<File | null>(null);
+  
+  // Initialize form
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      website: '',
+      description: '',
+      category: '',
+      tags: '',
+      priceModel: 'freemium',
+      hasAPI: false,
+      hasDemo: false,
+      contactEmail: '',
+      termsAgreed: false
+    }
   });
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-  
-  const handleCheckboxChange = (name: string) => {
-    setFormData(prev => ({ ...prev, [name]: !prev[name as keyof typeof prev] }));
-  };
-  
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'logo' | 'screenshot') => {
     const file = e.target.files?.[0] || null;
-    setFormData(prev => ({ ...prev, [field]: file }));
+    if (field === 'logo') {
+      setLogo(file);
+    } else {
+      setScreenshot(file);
+    }
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = (data: FormValues) => {
     setIsSubmitting(true);
     
     // Simulate form submission
@@ -83,20 +99,9 @@ const SubmitTool = () => {
       setIsSubmitting(false);
       
       // Reset form
-      setFormData({
-        name: '',
-        website: '',
-        description: '',
-        category: '',
-        tags: '',
-        priceModel: 'freemium',
-        hasAPI: false,
-        hasDemo: false,
-        logo: null,
-        screenshot: null,
-        contactEmail: '',
-        termsAgreed: false
-      });
+      form.reset();
+      setLogo(null);
+      setScreenshot(null);
     }, 1500);
   };
 
@@ -120,255 +125,329 @@ const SubmitTool = () => {
             </AlertDescription>
           </Alert>
           
-          <form onSubmit={handleSubmit}>
-            <Card className="mb-8">
-              <CardHeader>
-                <CardTitle>Basic Information</CardTitle>
-                <CardDescription>
-                  Provide essential details about the tool
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <FormLabel htmlFor="name">Tool Name</FormLabel>
-                  <Input 
-                    id="name"
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <Card className="mb-8">
+                <CardHeader>
+                  <CardTitle>Basic Information</CardTitle>
+                  <CardDescription>
+                    Provide essential details about the tool
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <FormField
+                    control={form.control}
                     name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Enter the tool name"
-                    required
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tool Name</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Enter the tool name"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-                
-                <div className="space-y-2">
-                  <FormLabel htmlFor="website">Website URL</FormLabel>
-                  <Input 
-                    id="website"
+                  
+                  <FormField
+                    control={form.control}
                     name="website"
-                    value={formData.website}
-                    onChange={handleChange}
-                    placeholder="https://"
-                    required
-                    type="url"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Website URL</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="https://"
+                            type="url"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-                
-                <div className="space-y-2">
-                  <FormLabel htmlFor="description">Description</FormLabel>
-                  <Textarea 
-                    id="description"
+                  
+                  <FormField
+                    control={form.control}
                     name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    placeholder="Describe what the tool does, its features, and benefits"
-                    required
-                    rows={5}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Textarea 
+                            placeholder="Describe what the tool does, its features, and benefits"
+                            rows={5}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Minimum 100 characters. Include key features and use cases.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  <p className="text-xs text-muted-foreground">
-                    Minimum 100 characters. Include key features and use cases.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="mb-8">
-              <CardHeader>
-                <CardTitle>Categorization</CardTitle>
-                <CardDescription>
-                  Help users find the tool more easily
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <FormLabel htmlFor="category">Category</FormLabel>
-                  <Select
-                    onValueChange={(value) => handleSelectChange('category', value)}
-                    value={formData.category}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map(category => (
-                        <SelectItem key={category.id} value={category.slug}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="space-y-2">
-                  <FormLabel htmlFor="tags">Tags</FormLabel>
-                  <Input 
-                    id="tags"
+                </CardContent>
+              </Card>
+              
+              <Card className="mb-8">
+                <CardHeader>
+                  <CardTitle>Categorization</CardTitle>
+                  <CardDescription>
+                    Help users find the tool more easily
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="category"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Category</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a category" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {categories.map(category => (
+                              <SelectItem key={category.id} value={category.slug}>
+                                {category.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
                     name="tags"
-                    value={formData.tags}
-                    onChange={handleChange}
-                    placeholder="Add comma-separated tags (e.g., NLP, Text Generation, Content)"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tags</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Add comma-separated tags (e.g., NLP, Text Generation, Content)"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Add up to 5 tags that describe the tool's functionality or purpose.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  <p className="text-xs text-muted-foreground">
-                    Add up to 5 tags that describe the tool's functionality or purpose.
-                  </p>
-                </div>
-                
-                <div className="space-y-2">
-                  <FormLabel htmlFor="priceModel">Pricing Model</FormLabel>
-                  <Select
-                    onValueChange={(value) => handleSelectChange('priceModel', value)}
-                    value={formData.priceModel}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select pricing model" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="free">Free</SelectItem>
-                      <SelectItem value="freemium">Freemium</SelectItem>
-                      <SelectItem value="paid">Paid</SelectItem>
-                      <SelectItem value="subscription">Subscription</SelectItem>
-                      <SelectItem value="enterprise">Enterprise/Custom</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox 
-                      id="hasAPI" 
-                      checked={formData.hasAPI}
-                      onCheckedChange={() => handleCheckboxChange('hasAPI')}
+                  
+                  <FormField
+                    control={form.control}
+                    name="priceModel"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Pricing Model</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select pricing model" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="free">Free</SelectItem>
+                            <SelectItem value="freemium">Freemium</SelectItem>
+                            <SelectItem value="paid">Paid</SelectItem>
+                            <SelectItem value="subscription">Subscription</SelectItem>
+                            <SelectItem value="enterprise">Enterprise/Custom</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <div className="flex flex-col gap-3">
+                    <FormField
+                      control={form.control}
+                      name="hasAPI"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>Has API Access</FormLabel>
+                          </div>
+                        </FormItem>
+                      )}
                     />
-                    <FormLabel htmlFor="hasAPI" className="cursor-pointer">Has API Access</FormLabel>
+                    
+                    <FormField
+                      control={form.control}
+                      name="hasDemo"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>Has Free Demo/Trial</FormLabel>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="mb-8">
+                <CardHeader>
+                  <CardTitle>Media</CardTitle>
+                  <CardDescription>
+                    Upload images to showcase the tool
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <FormLabel htmlFor="logo">Logo</FormLabel>
+                    <div className="flex items-center gap-4">
+                      <div className="h-16 w-16 border rounded-md flex items-center justify-center bg-muted">
+                        {logo ? (
+                          <img 
+                            src={URL.createObjectURL(logo)} 
+                            alt="Logo preview" 
+                            className="h-full w-full object-contain p-1"
+                          />
+                        ) : (
+                          <Info size={24} className="text-muted-foreground" />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <Input
+                          id="logo"
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleFileChange(e, 'logo')}
+                          className="max-w-sm"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Square image recommended, max 2MB
+                        </p>
+                      </div>
+                    </div>
                   </div>
                   
-                  <div className="flex items-center space-x-2">
-                    <Checkbox 
-                      id="hasDemo" 
-                      checked={formData.hasDemo}
-                      onCheckedChange={() => handleCheckboxChange('hasDemo')}
-                    />
-                    <FormLabel htmlFor="hasDemo" className="cursor-pointer">Has Free Demo/Trial</FormLabel>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="mb-8">
-              <CardHeader>
-                <CardTitle>Media</CardTitle>
-                <CardDescription>
-                  Upload images to showcase the tool
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <FormLabel htmlFor="logo">Logo</FormLabel>
-                  <div className="flex items-center gap-4">
-                    <div className="h-16 w-16 border rounded-md flex items-center justify-center bg-muted">
-                      {formData.logo ? (
-                        <img 
-                          src={URL.createObjectURL(formData.logo)} 
-                          alt="Logo preview" 
-                          className="h-full w-full object-contain p-1"
-                        />
-                      ) : (
-                        <Info size={24} className="text-muted-foreground" />
-                      )}
-                    </div>
-                    <div className="flex-1">
+                  <div className="space-y-2">
+                    <FormLabel htmlFor="screenshot">Screenshot</FormLabel>
+                    <div className="flex flex-col gap-3">
+                      <div className="h-40 border rounded-md flex items-center justify-center bg-muted">
+                        {screenshot ? (
+                          <img 
+                            src={URL.createObjectURL(screenshot)} 
+                            alt="Screenshot preview" 
+                            className="h-full w-full object-contain p-2"
+                          />
+                        ) : (
+                          <div className="flex flex-col items-center text-muted-foreground">
+                            <Upload size={32} />
+                            <span className="text-sm mt-2">Upload a screenshot</span>
+                          </div>
+                        )}
+                      </div>
                       <Input
-                        id="logo"
+                        id="screenshot"
                         type="file"
                         accept="image/*"
-                        onChange={(e) => handleFileChange(e, 'logo')}
-                        className="max-w-sm"
+                        onChange={(e) => handleFileChange(e, 'screenshot')}
                       />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Square image recommended, max 2MB
+                      <p className="text-xs text-muted-foreground">
+                        A screenshot showcasing the tool's interface or output. Max 5MB.
                       </p>
                     </div>
                   </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <FormLabel htmlFor="screenshot">Screenshot</FormLabel>
-                  <div className="flex flex-col gap-3">
-                    <div className="h-40 border rounded-md flex items-center justify-center bg-muted">
-                      {formData.screenshot ? (
-                        <img 
-                          src={URL.createObjectURL(formData.screenshot)} 
-                          alt="Screenshot preview" 
-                          className="h-full w-full object-contain p-2"
-                        />
-                      ) : (
-                        <div className="flex flex-col items-center text-muted-foreground">
-                          <Upload size={32} />
-                          <span className="text-sm mt-2">Upload a screenshot</span>
-                        </div>
-                      )}
-                    </div>
-                    <Input
-                      id="screenshot"
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleFileChange(e, 'screenshot')}
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      A screenshot showcasing the tool's interface or output. Max 5MB.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="mb-8">
-              <CardHeader>
-                <CardTitle>Contact Information</CardTitle>
-                <CardDescription>
-                  We'll use this to contact you about the submission
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <FormLabel htmlFor="contactEmail">Contact Email</FormLabel>
-                  <Input 
-                    id="contactEmail"
+                </CardContent>
+              </Card>
+              
+              <Card className="mb-8">
+                <CardHeader>
+                  <CardTitle>Contact Information</CardTitle>
+                  <CardDescription>
+                    We'll use this to contact you about the submission
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <FormField
+                    control={form.control}
                     name="contactEmail"
-                    value={formData.contactEmail}
-                    onChange={handleChange}
-                    placeholder="your@email.com"
-                    type="email"
-                    required
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Contact Email</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="email"
+                            placeholder="your@email.com"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          We'll notify you when your submission is approved or if we need more information.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  <p className="text-xs text-muted-foreground">
-                    We'll notify you when your submission is approved or if we need more information.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <div className="flex items-center space-x-2 mb-6">
-              <Checkbox 
-                id="termsAgreed" 
-                checked={formData.termsAgreed}
-                onCheckedChange={() => handleCheckboxChange('termsAgreed')}
-                required
+                </CardContent>
+              </Card>
+              
+              <FormField
+                control={form.control}
+                name="termsAgreed"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md mb-6">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>
+                        I confirm that I have the right to submit this tool and agree to the terms of service
+                      </FormLabel>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
               />
-              <label
-                htmlFor="termsAgreed"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                I confirm that I have the right to submit this tool and agree to the terms of service
-              </label>
-            </div>
-            
-            <div className="flex justify-center">
-              <Button type="submit" size="lg" disabled={isSubmitting || !formData.termsAgreed}>
-                {isSubmitting ? "Submitting..." : "Submit Tool"}
-              </Button>
-            </div>
-          </form>
+              
+              <div className="flex justify-center">
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit Tool"}
+                </Button>
+              </div>
+            </form>
+          </Form>
         </div>
       </div>
     </Layout>
