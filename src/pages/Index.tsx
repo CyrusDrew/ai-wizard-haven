@@ -84,6 +84,9 @@ const Index = () => {
                   ))}
                 </div>
               </div>
+              
+              {/* Latest Articles Waterfall - Moved here after the featured tools section */}
+              <ArticleWaterfall />
             </TabsContent>
 
             <TabsContent value="articles">
@@ -108,9 +111,6 @@ const Index = () => {
             </TabsContent>
           </Tabs>
         </section>
-
-        {/* Latest Articles Waterfall - Now moved after the featured tools section */}
-        <ArticleWaterfall />
 
         {/* Newsletter Section */}
         <section className="bg-gradient-to-r from-ai-purple/10 to-ai-blue/10 rounded-xl p-8 text-center mb-8">

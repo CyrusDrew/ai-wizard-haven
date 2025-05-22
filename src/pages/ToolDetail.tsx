@@ -24,11 +24,12 @@ import {
   Share2,
   Flag,
   MessageSquare,
-  Check
+  Check,
+  Clock
 } from 'lucide-react';
 import { tools, blogPosts } from '@/data/mockData';
 import BlogPostCard from '@/components/card/BlogPostCard';
-import { ColorVariant } from '@/components/card/ToolCard';
+import ToolCard, { ColorVariant } from '@/components/card/ToolCard';
 
 // Mock reviews data
 const reviews = [
