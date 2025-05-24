@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Search, Calendar, Clock, Eye, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import HotArticlesSection from '@/components/sections/HotArticlesSection';
 
 const Articles = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -191,8 +192,8 @@ const Articles = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Main Content - 3/4 width */}
-          <div className="lg:col-span-3">
+          {/* Main Content - 2/3 width */}
+          <div className="lg:col-span-2">
             <Tabs defaultValue="all" className="w-full">
               <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="all">全部</TabsTrigger>
@@ -203,7 +204,7 @@ const Articles = () => {
               </TabsList>
               
               <TabsContent value="all">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div className="grid grid-cols-1 gap-6 mt-6">
                   {allArticles.map((article) => (
                     <ArticleCard key={article.id} article={article} />
                   ))}
@@ -212,7 +213,7 @@ const Articles = () => {
               
               {articleCategories.map((category) => (
                 <TabsContent key={category.id} value={category.id}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                  <div className="grid grid-cols-1 gap-6 mt-6">
                     {category.articles.map((article) => (
                       <ArticleCard key={article.id} article={article} />
                     ))}
@@ -222,9 +223,13 @@ const Articles = () => {
             </Tabs>
           </div>
 
-          {/* Sidebar - 1/4 width */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-24">
+          {/* Sidebar - 1/3 width */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Hot Articles */}
+            <HotArticlesSection />
+            
+            {/* Real-time News */}
+            <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp size={20} />
@@ -261,54 +266,56 @@ const Articles = () => {
 const ArticleCard = ({ article }: { article: any }) => {
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow">
-      <Link to={`/articles/${article.id}`}>
-        <div className="aspect-video bg-muted">
-          <img
-            src={article.image}
-            alt={article.title}
-            className="w-full h-full object-cover transition-transform hover:scale-105"
-          />
-        </div>
-      </Link>
-      
-      <CardContent className="p-5">
-        <div className="space-y-3">
-          <div className="flex flex-wrap gap-2">
-            {article.tags.slice(0, 2).map((tag: string) => (
-              <Badge key={tag} variant="secondary" className="text-xs">
-                {tag}
-              </Badge>
-            ))}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Link to={`/articles/${article.id}`} className="md:col-span-1">
+          <div className="aspect-video bg-muted">
+            <img
+              src={article.image}
+              alt={article.title}
+              className="w-full h-full object-cover transition-transform hover:scale-105"
+            />
           </div>
-          
-          <Link to={`/articles/${article.id}`}>
-            <h3 className="font-semibold text-lg line-clamp-2 hover:text-primary transition-colors">
-              {article.title}
-            </h3>
-          </Link>
-          
-          <p className="text-muted-foreground line-clamp-2 text-sm">
-            {article.excerpt}
-          </p>
-          
-          <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t">
-            <div className="flex items-center gap-3">
+        </Link>
+        
+        <CardContent className="md:col-span-2 p-5">
+          <div className="space-y-3">
+            <div className="flex flex-wrap gap-2">
+              {article.tags.slice(0, 2).map((tag: string) => (
+                <Badge key={tag} variant="secondary" className="text-xs">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+            
+            <Link to={`/articles/${article.id}`}>
+              <h3 className="font-semibold text-lg line-clamp-2 hover:text-primary transition-colors">
+                {article.title}
+              </h3>
+            </Link>
+            
+            <p className="text-muted-foreground line-clamp-2 text-sm">
+              {article.excerpt}
+            </p>
+            
+            <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t">
+              <div className="flex items-center gap-3">
+                <span className="flex items-center gap-1">
+                  <Calendar size={12} />
+                  {article.date}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock size={12} />
+                  {article.readTime}
+                </span>
+              </div>
               <span className="flex items-center gap-1">
-                <Calendar size={12} />
-                {article.date}
-              </span>
-              <span className="flex items-center gap-1">
-                <Clock size={12} />
-                {article.readTime}
+                <Eye size={12} />
+                {article.views}
               </span>
             </div>
-            <span className="flex items-center gap-1">
-              <Eye size={12} />
-              {article.views}
-            </span>
           </div>
-        </div>
-      </CardContent>
+        </CardContent>
+      </div>
     </Card>
   );
 };
