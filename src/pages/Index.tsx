@@ -10,6 +10,7 @@ import CategoryIcon from '@/components/CategoryIcon';
 import ToolCard from '@/components/card/ToolCard';
 import BlogPostCard from '@/components/card/BlogPostCard';
 import ArticleWaterfall from '@/components/articles/ArticleWaterfall';
+import HeroCarousel from '@/components/carousel/HeroCarousel';
 import { categories, tools, blogPosts } from '@/data/mockData';
 import {
   Carousel,
@@ -78,6 +79,9 @@ const Index = () => {
             </Link>
           </Button>
         </section>
+
+        {/* Hero Carousel */}
+        <HeroCarousel />
 
         {/* Categories Section - "Golden Area" with icons */}
         <section className="mb-12">
