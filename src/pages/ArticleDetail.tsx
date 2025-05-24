@@ -7,8 +7,41 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { useParams, Link } from 'react-router-dom';
 import { Calendar, Clock, Heart, Bookmark, Share, MessageSquare, Send, TrendingUp } from 'lucide-react';
-import { blogPosts } from '@/data/mockData';
 import { useState } from 'react';
+
+// Mock article data since blogPosts might not be available
+const mockArticles = [
+  {
+    id: '1',
+    title: 'ChatGPT新手完全指南：从入门到精通',
+    excerpt: '详细介绍ChatGPT的基本功能、高级技巧和实际应用场景，帮助新手快速掌握这个强大的AI工具。',
+    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=2000&q=80',
+    author: { name: 'AI专家', avatar: '' },
+    date: '2024-01-15',
+    readTime: '10分钟',
+    tags: ['ChatGPT', '教程', '入门']
+  },
+  {
+    id: '2',
+    title: 'Midjourney绘图技巧：打造专业级AI艺术作品',
+    excerpt: '学习Midjourney的高级提示词技巧，创作令人惊艳的AI艺术作品，从基础操作到高级技法全面覆盖。',
+    image: 'https://images.unsplash.com/photo-1686191128892-fd6e0c3a2889?auto=format&fit=crop&w=2000&q=80',
+    author: { name: 'AI艺术家', avatar: '' },
+    date: '2024-01-10',
+    readTime: '15分钟',
+    tags: ['Midjourney', '绘图', 'AI艺术']
+  },
+  {
+    id: '3',
+    title: '深度学习基础：神经网络原理详解',
+    excerpt: '从零开始理解神经网络的工作原理和基本概念，为深入学习AI技术打下坚实基础。',
+    image: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=2000&q=80',
+    author: { name: 'ML研究员', avatar: '' },
+    date: '2024-01-08',
+    readTime: '25分钟',
+    tags: ['深度学习', '神经网络', '理论']
+  }
+];
 
 // Mock hot articles data
 const hotArticles24h = [
@@ -73,8 +106,12 @@ const ArticleDetail = () => {
   const [newComment, setNewComment] = useState('');
   const [hotArticleTab, setHotArticleTab] = useState('24h');
   
+  console.log('ArticleDetail - Current ID:', id);
+  
   // Find the article based on the ID from the URL
-  const article = blogPosts.find(post => post.id === id);
+  const article = mockArticles.find(post => post.id === id);
+  
+  console.log('ArticleDetail - Found article:', article);
   
   if (!article) {
     return (
@@ -91,7 +128,7 @@ const ArticleDetail = () => {
   }
 
   // Related articles (excluding current article)
-  const relatedArticles = blogPosts
+  const relatedArticles = mockArticles
     .filter(post => post.id !== article.id && post.tags.some(tag => article.tags.includes(tag)))
     .slice(0, 3);
 
@@ -177,7 +214,7 @@ const ArticleDetail = () => {
             {/* Featured Image */}
             <div className="mb-8 rounded-lg overflow-hidden">
               <img 
-                src={article.image || "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=2000&q=80"} 
+                src={article.image} 
                 alt={article.title} 
                 className="w-full h-auto object-cover aspect-video"
               />
@@ -319,7 +356,7 @@ const ArticleDetail = () => {
                     <Link to={`/articles/${relatedArticle.id}`}>
                       <div className="aspect-video bg-muted">
                         <img 
-                          src={relatedArticle.image || "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=800&q=80"} 
+                          src={relatedArticle.image} 
                           alt={relatedArticle.title} 
                           className="w-full h-full object-cover"
                         />
