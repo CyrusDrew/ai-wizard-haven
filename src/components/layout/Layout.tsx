@@ -10,7 +10,8 @@ import {
   Home, 
   Grid, 
   MessageSquare,
-  UserPlus
+  UserPlus,
+  FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -89,6 +90,7 @@ const Layout = ({ children }: LayoutProps) => {
             <nav className="hidden md:flex items-center space-x-1">
               <TopNavItem to="/" icon={<Home size={16} />} label="Home" />
               <TopNavItem to="/categories" icon={<Grid size={16} />} label="Categories" />
+              <TopNavItem to="/articles" icon={<FileText size={16} />} label="Articles" />
               <TopNavItem to="/forum" icon={<MessageSquare size={16} />} label="Community" />
               <TopNavItem to="/profile" icon={<User size={16} />} label="Profile" />
             </nav>
@@ -171,14 +173,9 @@ const Layout = ({ children }: LayoutProps) => {
             
             <NavItem to="/" icon={<Home size={20} />} label="Home" />
             <NavItem to="/categories" icon={<Grid size={20} />} label="Categories" />
+            <NavItem to="/articles" icon={<FileText size={20} />} label="Articles" />
             <NavItem to="/forum" icon={<MessageSquare size={20} />} label="Community" />
             <NavItem to="/profile" icon={<User size={20} />} label="Profile" />
-            
-            <div className="mt-auto pt-6 border-t">
-              <Button className="w-full" asChild>
-                <Link to="/submit-tool">Submit Tool</Link>
-              </Button>
-            </div>
           </nav>
         </div>
       )}

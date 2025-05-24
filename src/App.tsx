@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import ArticleDetail from "./pages/ArticleDetail";
 import SubmitTool from "./pages/SubmitTool";
+import Articles from "./pages/Articles";
 
 // Auth Pages
 import Login from "./pages/Auth/Login";
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/categories" element={<Categories />} />
           <Route path="/categories/:categorySlug" element={<ToolsList />} />
           <Route path="/tools/:id" element={<ToolDetail />} />
+          <Route path="/articles" element={<Articles />} />
           <Route path="/articles/:id" element={<ArticleDetail />} />
           <Route path="/forum" element={<Forum />} />
           <Route path="/forum/topic/:id" element={<ForumPostDetail />} />
