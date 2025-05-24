@@ -3,8 +3,7 @@ import { useState, useRef } from 'react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Search, TrendingUp } from 'lucide-react';
+import { TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CategoryIcon from '@/components/CategoryIcon';
 import ToolCard from '@/components/card/ToolCard';
@@ -23,7 +22,6 @@ import { useEffect } from 'react';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('tools');
-  const [searchQuery, setSearchQuery] = useState('');
   const featuredCarouselRef = useRef(null);
   const moreToolsCarouselRef = useRef(null);
   
@@ -54,25 +52,11 @@ const Index = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        {/* Search Section - simplified */}
-        <section className="text-center mb-8 pt-4">
-          <div className="relative max-w-xl mx-auto">
-            <Input
-              type="text"
-              placeholder="Search for AI tools, tutorials, or topics..."
-              className="pr-10 h-12 text-base"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <Search size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          </div>
-        </section>
-
         {/* Hero Carousel */}
         <HeroCarousel />
 
         {/* Categories Section - "Golden Area" with icons */}
-        <section className="mb-12">
+        <section className="mb-12 mt-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-semibold">Popular Categories</h2>
             <Button variant="outline" asChild>
@@ -180,7 +164,7 @@ const Index = () => {
             Get the latest AI tools, tutorials, and insights delivered to your inbox weekly.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-            <Input type="email" placeholder="Your email address" className="h-12" />
+            <input type="email" placeholder="Your email address" className="h-12 px-4 border border-gray-300 rounded-md flex-1" />
             <Button className="h-12">Subscribe</Button>
           </div>
         </section>
