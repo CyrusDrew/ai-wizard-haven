@@ -7,11 +7,11 @@ import {
   User, 
   LogIn,
   Bell,
-  Home, 
   Grid, 
   MessageSquare,
   UserPlus,
-  FileText
+  FileText,
+  Plus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -88,11 +88,16 @@ const Layout = ({ children }: LayoutProps) => {
           {/* Top Navigation Menu - Desktop */}
           {!isMobile && (
             <nav className="hidden md:flex items-center space-x-1">
-              <TopNavItem to="/" icon={<Home size={16} />} label="Home" />
               <TopNavItem to="/categories" icon={<Grid size={16} />} label="Categories" />
               <TopNavItem to="/articles" icon={<FileText size={16} />} label="Articles" />
               <TopNavItem to="/forum" icon={<MessageSquare size={16} />} label="Community" />
               <TopNavItem to="/profile" icon={<User size={16} />} label="Profile" />
+              <Button variant="outline" size="sm" asChild className="ml-2">
+                <Link to="/submit-tool" className="flex items-center gap-1">
+                  <Plus size={14} />
+                  Submit Tool
+                </Link>
+              </Button>
             </nav>
           )}
 
@@ -171,11 +176,11 @@ const Layout = ({ children }: LayoutProps) => {
               <Search size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             </div>
             
-            <NavItem to="/" icon={<Home size={20} />} label="Home" />
             <NavItem to="/categories" icon={<Grid size={20} />} label="Categories" />
             <NavItem to="/articles" icon={<FileText size={20} />} label="Articles" />
             <NavItem to="/forum" icon={<MessageSquare size={20} />} label="Community" />
             <NavItem to="/profile" icon={<User size={20} />} label="Profile" />
+            <NavItem to="/submit-tool" icon={<Plus size={20} />} label="Submit Tool" />
           </nav>
         </div>
       )}
@@ -234,7 +239,7 @@ const TopNavItem = ({ to, icon, label }: { to: string; icon: React.ReactNode; la
       className={({ isActive }) => 
         `flex items-center space-x-1 px-3 py-2 rounded-md text-sm ${
           isActive 
-            ? "text-primary font-medium" 
+            ? "text-primary font-medium bg-muted/30" 
             : "hover:bg-muted/50"
         }`
       }

@@ -4,7 +4,7 @@ import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { Search, TrendingUp, Plus } from 'lucide-react';
+import { Search, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CategoryIcon from '@/components/CategoryIcon';
 import ToolCard from '@/components/card/ToolCard';
@@ -54,15 +54,9 @@ const Index = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        {/* Hero Section */}
-        <section className="text-center mb-12 pt-4 pb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Discover & Learn About <span className="gradient-text">AI Tools</span>
-          </h1>
-          <p className="text-xl text-muted-foreground mx-auto max-w-2xl mb-8">
-            Your ultimate guide to exploring the best AI tools and tutorials to enhance your workflow and creativity.
-          </p>
-          <div className="relative max-w-xl mx-auto mb-6">
+        {/* Search Section - simplified */}
+        <section className="text-center mb-8 pt-4">
+          <div className="relative max-w-xl mx-auto">
             <Input
               type="text"
               placeholder="Search for AI tools, tutorials, or topics..."
@@ -72,12 +66,6 @@ const Index = () => {
             />
             <Search size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           </div>
-          <Button asChild className="mt-2">
-            <Link to="/submit-tool" className="flex items-center gap-2">
-              <Plus size={16} />
-              Submit an AI Tool
-            </Link>
-          </Button>
         </section>
 
         {/* Hero Carousel */}
