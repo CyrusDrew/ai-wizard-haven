@@ -22,7 +22,6 @@ import {
 import { useEffect } from 'react';
 
 const Index = () => {
-  const [activeTab, setActiveTab] = useState('tools');
   const featuredCarouselRef = useRef(null);
   const moreToolsCarouselRef = useRef(null);
   
@@ -75,91 +74,63 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Main Content - 3/4 width */}
           <div className="lg:col-span-3">
-            {/* Content Tabs */}
+            {/* Featured Tools Section */}
             <section className="mb-8">
-              <Tabs defaultValue="tools" onValueChange={(value) => setActiveTab(value)}>
-                <div className="flex items-center justify-between mb-6">
-                  <TabsList>
-                    <TabsTrigger value="tools">Featured Tools</TabsTrigger>
-                    <TabsTrigger value="articles">Latest Articles</TabsTrigger>
-                  </TabsList>
-                  <Button variant="ghost" size="sm" className="text-primary flex items-center">
-                    <TrendingUp size={16} className="mr-1" /> 
-                    Trending
-                  </Button>
-                </div>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-semibold">Featured Tools</h2>
+                <Button variant="ghost" size="sm" className="text-primary flex items-center">
+                  <TrendingUp size={16} className="mr-1" /> 
+                  Trending
+                </Button>
+              </div>
 
-                <TabsContent value="tools">
-                  {/* Featured Tools Carousel */}
-                  <div className="mb-8">
-                    <Carousel 
-                      className="w-full" 
-                      setApi={(api) => {
-                        featuredCarouselRef.current = api;
-                      }}
-                    >
-                      <CarouselContent className="-ml-4">
-                        {featuredTools.map((tool) => (
-                          <CarouselItem key={tool.id} className="pl-4 md:basis-1/2 lg:basis-1/2">
-                            <ToolCard {...tool} className="h-full" />
-                          </CarouselItem>
-                        ))}
-                      </CarouselContent>
-                      <div className="hidden md:flex">
-                        <CarouselPrevious />
-                        <CarouselNext />
-                      </div>
-                    </Carousel>
-                  </div>
-                  
-                  {/* Explore More Tools Carousel */}
-                  <div className="mt-12 mb-8">
-                    <h3 className="text-xl font-semibold mb-6">Explore More Tools</h3>
-                    <Carousel 
-                      className="w-full"
-                      setApi={(api) => {
-                        moreToolsCarouselRef.current = api;
-                      }}
-                    >
-                      <CarouselContent className="-ml-4">
-                        {moreTools.slice(0, 8).map((tool) => (
-                          <CarouselItem key={tool.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                            <ToolCard {...tool} className="h-full" />
-                          </CarouselItem>
-                        ))}
-                      </CarouselContent>
-                      <div className="hidden md:flex">
-                        <CarouselPrevious />
-                        <CarouselNext />
-                      </div>
-                    </Carousel>
-                  </div>
-                  
-                  {/* Latest Articles Waterfall after featured tools */}
-                  <ArticleWaterfall />
-                </TabsContent>
-
-                <TabsContent value="articles">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {blogPosts.slice(0, 2).map((post) => (
-                      <BlogPostCard 
-                        key={post.id} 
-                        {...post} 
-                        className="h-full"
-                      />
+              {/* Featured Tools Carousel */}
+              <div className="mb-8">
+                <Carousel 
+                  className="w-full" 
+                  setApi={(api) => {
+                    featuredCarouselRef.current = api;
+                  }}
+                >
+                  <CarouselContent className="-ml-4">
+                    {featuredTools.map((tool) => (
+                      <CarouselItem key={tool.id} className="pl-4 md:basis-1/2 lg:basis-1/2">
+                        <ToolCard {...tool} className="h-full" />
+                      </CarouselItem>
                     ))}
+                  </CarouselContent>
+                  <div className="hidden md:flex">
+                    <CarouselPrevious />
+                    <CarouselNext />
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-                    {blogPosts.slice(2, 5).map((post) => (
-                      <BlogPostCard 
-                        key={post.id} 
-                        {...post} 
-                        className="h-full"
-                      />
+                </Carousel>
+              </div>
+              
+              {/* Explore More Tools Carousel */}
+              <div className="mt-12 mb-8">
+                <h3 className="text-xl font-semibold mb-6">Explore More Tools</h3>
+                <Carousel 
+                  className="w-full"
+                  setApi={(api) => {
+                    moreToolsCarouselRef.current = api;
+                  }}
+                >
+                  <CarouselContent className="-ml-4">
+                    {moreTools.slice(0, 8).map((tool) => (
+                      <CarouselItem key={tool.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                        <ToolCard {...tool} className="h-full" />
+                      </CarouselItem>
                     ))}
+                  </CarouselContent>
+                  <div className="hidden md:flex">
+                    <CarouselPrevious />
+                    <CarouselNext />
                   </div>
-                </TabsContent>
-              </Tabs>
+                </Carousel>
+              </div>
+              
+              {/* Latest Articles Waterfall after featured tools */}
+              <ArticleWaterfall />
             </section>
           </div>
 
