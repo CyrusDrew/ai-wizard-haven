@@ -76,8 +76,8 @@ const Index = () => {
               <div 
                 key={category.id}
                 onClick={() => handleCategoryClick(category.slug)}
-                className={`flex flex-col items-center justify-center p-5 rounded-lg hover:shadow-md transition-all duration-200 border border-border cursor-pointer ${
-                  selectedCategory === category.slug ? 'bg-primary/10 border-primary' : 'bg-white dark:bg-gray-800'
+                className={`flex flex-col items-center justify-center p-5 rounded-lg hover:shadow-md transition-all duration-200 border cursor-pointer ${
+                  selectedCategory === category.slug ? 'border-primary' : 'border-border bg-white dark:bg-gray-800'
                 }`}
               >
                 <CategoryIcon 
@@ -101,7 +101,7 @@ const Index = () => {
             </span>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             {filteredCategoryTools.slice(0, 8).map((tool) => (
               <div key={tool.id} className="group cursor-pointer">
                 <Link to={`/tools/${tool.id}`} className="block">
