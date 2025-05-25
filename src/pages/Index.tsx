@@ -101,7 +101,7 @@ const Index = () => {
             </span>
           </div>
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             {filteredCategoryTools.slice(0, 8).map((tool) => (
               <div key={tool.id} className="group cursor-pointer">
                 <Link to={`/tools/${tool.id}`} className="block">
