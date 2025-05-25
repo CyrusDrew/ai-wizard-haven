@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -192,8 +191,8 @@ const Articles = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Main Content - 2/3 width */}
-          <div className="lg:col-span-2">
+          {/* Main Content - 3/4 width */}
+          <div className="lg:col-span-3">
             <Tabs defaultValue="all" className="w-full">
               <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="all">全部</TabsTrigger>
@@ -223,8 +222,8 @@ const Articles = () => {
             </Tabs>
           </div>
 
-          {/* Sidebar - 1/3 width */}
-          <div className="lg:col-span-2 space-y-6">
+          {/* Sidebar - 1/4 width */}
+          <div className="lg:col-span-1 space-y-6">
             {/* Hot Articles */}
             <HotArticlesSection />
             
@@ -237,7 +236,7 @@ const Articles = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ScrollArea className="h-96">
+                <ScrollArea className="h-80">
                   <div className="space-y-4">
                     {realtimeNews.map((news) => (
                       <div key={news.id} className="border-b border-border pb-3 last:border-b-0">
