@@ -24,16 +24,14 @@ import { useEffect } from 'react';
 const Index = () => {
   const featuredCarouselRef = useRef(null);
   const moreToolsCarouselRef = useRef(null);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const popularCategories = categories.slice(0, 8);
+  const [selectedCategory, setSelectedCategory] = useState<string>(popularCategories[0]?.slug || '');
   
   const featuredTools = tools.filter(tool => tool.featured);
-  const popularCategories = categories.slice(0, 8);
   const moreTools = tools.filter(tool => !tool.featured);
 
   // Filter tools based on selected category
-  const filteredCategoryTools = selectedCategory === 'all' 
-    ? tools 
-    : tools.filter(tool => tool.categorySlug === selectedCategory);
+  const filteredCategoryTools = tools.filter(tool => tool.categorySlug === selectedCategory);
 
   // Auto scroll the carousels every 4 seconds
   useEffect(() => {
@@ -74,20 +72,6 @@ const Index = () => {
             </Button>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            {/* All Tools Category */}
-            <div 
-              onClick={() => handleCategoryClick('all')}
-              className={`flex flex-col items-center justify-center p-5 rounded-lg hover:shadow-md transition-all duration-200 border border-border cursor-pointer ${
-                selectedCategory === 'all' ? 'bg-primary/10 border-primary' : 'bg-white dark:bg-gray-800'
-              }`}
-            >
-              <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-3 bg-gray-500 text-white">
-                <span className="text-lg">🏠</span>
-              </div>
-              <h3 className="text-sm font-medium">All Tools</h3>
-              <p className="text-xs text-muted-foreground">{tools.length} tools</p>
-            </div>
-            
             {popularCategories.map((category) => (
               <div 
                 key={category.id}
@@ -106,10 +90,7 @@ const Index = () => {
         <section className="mb-12">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-semibold">
-              {selectedCategory === 'all' 
-                ? 'All Tools' 
-                : categories.find(c => c.slug === selectedCategory)?.name || 'Tools'
-              }
+              {categories.find(c => c.slug === selectedCategory)?.name || 'Tools'}
             </h2>
             <span className="text-muted-foreground text-sm">
               {filteredCategoryTools.length} tools found
@@ -143,7 +124,7 @@ const Index = () => {
           {filteredCategoryTools.length > 24 && (
             <div className="text-center mt-6">
               <Button variant="outline" asChild>
-                <Link to={selectedCategory === 'all' ? '/categories' : `/categories/${selectedCategory}`}>
+                <Link to={`/categories/${selectedCategory}`}>
                   View More Tools
                 </Link>
               </Button>

@@ -23,6 +23,8 @@ interface CategoryIconProps {
     count: number;
   };
   className?: string;
+  asFilter?: boolean;
+  onClick?: () => void;
 }
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -51,9 +53,33 @@ const colorVariants: Record<string, string> = {
   creativity: "bg-rose-500 text-white",
 };
 
-const CategoryIcon = ({ category, className }: CategoryIconProps) => {
+const CategoryIcon = ({ category, className, asFilter = false, onClick }: CategoryIconProps) => {
   const icon = iconMap[category.icon] || <MessageSquare size={24} />;
   const colorClass = colorVariants[category.icon] || "bg-gray-500 text-white";
+  
+  const content = (
+    <>
+      <div className={cn("w-12 h-12 rounded-lg flex items-center justify-center mb-3", colorClass)}>
+        {icon}
+      </div>
+      <h3 className="text-sm font-medium">{category.name}</h3>
+      <p className="text-xs text-muted-foreground">{category.count} tools</p>
+    </>
+  );
+
+  if (asFilter || onClick) {
+    return (
+      <div 
+        onClick={onClick}
+        className={cn(
+          "flex flex-col items-center justify-center p-5 rounded-lg hover:shadow-md transition-all duration-200 bg-white dark:bg-gray-800 border border-border cursor-pointer", 
+          className
+        )}
+      >
+        {content}
+      </div>
+    );
+  }
   
   return (
     <Link 
@@ -63,11 +89,7 @@ const CategoryIcon = ({ category, className }: CategoryIconProps) => {
         className
       )}
     >
-      <div className={cn("w-12 h-12 rounded-lg flex items-center justify-center mb-3", colorClass)}>
-        {icon}
-      </div>
-      <h3 className="text-sm font-medium">{category.name}</h3>
-      <p className="text-xs text-muted-foreground">{category.count} tools</p>
+      {content}
     </Link>
   );
 };
