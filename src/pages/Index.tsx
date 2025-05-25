@@ -80,7 +80,11 @@ const Index = () => {
                   selectedCategory === category.slug ? 'bg-primary/10 border-primary' : 'bg-white dark:bg-gray-800'
                 }`}
               >
-                <CategoryIcon category={category} className="border-0 p-0 hover:shadow-none" />
+                <CategoryIcon 
+                  category={category} 
+                  className="border-0 p-0 hover:shadow-none" 
+                  asFilter={true}
+                />
               </div>
             ))}
           </div>
@@ -97,12 +101,12 @@ const Index = () => {
             </span>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4">
-            {filteredCategoryTools.slice(0, 24).map((tool) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-2 gap-4">
+            {filteredCategoryTools.slice(0, 8).map((tool) => (
               <div key={tool.id} className="group cursor-pointer">
                 <Link to={`/tools/${tool.id}`} className="block">
-                  <div className="flex flex-col items-center p-4 rounded-lg border border-border hover:shadow-md transition-all duration-200 bg-white dark:bg-gray-800">
-                    <div className="w-12 h-12 mb-3 rounded-lg overflow-hidden">
+                  <div className="flex items-center p-4 rounded-lg border border-border hover:shadow-md transition-all duration-200 bg-white dark:bg-gray-800">
+                    <div className="w-16 h-16 mr-4 rounded-lg overflow-hidden flex-shrink-0">
                       {tool.image ? (
                         <img 
                           src={tool.image} 
@@ -113,15 +117,17 @@ const Index = () => {
                         <div className="w-full h-full bg-gradient-to-br from-ai-purple to-ai-blue"></div>
                       )}
                     </div>
-                    <h3 className="font-medium text-sm text-center line-clamp-1 mb-1">{tool.name}</h3>
-                    <p className="text-xs text-muted-foreground text-center line-clamp-2">{tool.description}</p>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-lg line-clamp-1 mb-1">{tool.name}</h3>
+                      <p className="text-sm text-muted-foreground line-clamp-2">{tool.description}</p>
+                    </div>
                   </div>
                 </Link>
               </div>
             ))}
           </div>
           
-          {filteredCategoryTools.length > 24 && (
+          {filteredCategoryTools.length > 8 && (
             <div className="text-center mt-6">
               <Button variant="outline" asChild>
                 <Link to={`/categories/${selectedCategory}`}>
