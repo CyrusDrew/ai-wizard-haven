@@ -24,10 +24,16 @@ import { useEffect } from 'react';
 const Index = () => {
   const featuredCarouselRef = useRef(null);
   const moreToolsCarouselRef = useRef(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   
   const featuredTools = tools.filter(tool => tool.featured);
   const popularCategories = categories.slice(0, 8);
   const moreTools = tools.filter(tool => !tool.featured);
+
+  // Filter tools based on selected category
+  const filteredCategoryTools = selectedCategory === 'all' 
+    ? tools 
+    : tools.filter(tool => tool.categorySlug === selectedCategory);
 
   // Auto scroll the carousels every 4 seconds
   useEffect(() => {
@@ -49,6 +55,10 @@ const Index = () => {
     };
   }, []);
 
+  const handleCategoryClick = (categorySlug: string) => {
+    setSelectedCategory(categorySlug);
+  };
+
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
@@ -64,10 +74,81 @@ const Index = () => {
             </Button>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
+            {/* All Tools Category */}
+            <div 
+              onClick={() => handleCategoryClick('all')}
+              className={`flex flex-col items-center justify-center p-5 rounded-lg hover:shadow-md transition-all duration-200 border border-border cursor-pointer ${
+                selectedCategory === 'all' ? 'bg-primary/10 border-primary' : 'bg-white dark:bg-gray-800'
+              }`}
+            >
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-3 bg-gray-500 text-white">
+                <span className="text-lg">🏠</span>
+              </div>
+              <h3 className="text-sm font-medium">All Tools</h3>
+              <p className="text-xs text-muted-foreground">{tools.length} tools</p>
+            </div>
+            
             {popularCategories.map((category) => (
-              <CategoryIcon key={category.id} category={category} />
+              <div 
+                key={category.id}
+                onClick={() => handleCategoryClick(category.slug)}
+                className={`flex flex-col items-center justify-center p-5 rounded-lg hover:shadow-md transition-all duration-200 border border-border cursor-pointer ${
+                  selectedCategory === category.slug ? 'bg-primary/10 border-primary' : 'bg-white dark:bg-gray-800'
+                }`}
+              >
+                <CategoryIcon category={category} className="border-0 p-0 hover:shadow-none" />
+              </div>
             ))}
           </div>
+        </section>
+
+        {/* Tools Grid Section */}
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-semibold">
+              {selectedCategory === 'all' 
+                ? 'All Tools' 
+                : categories.find(c => c.slug === selectedCategory)?.name || 'Tools'
+              }
+            </h2>
+            <span className="text-muted-foreground text-sm">
+              {filteredCategoryTools.length} tools found
+            </span>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4">
+            {filteredCategoryTools.slice(0, 24).map((tool) => (
+              <div key={tool.id} className="group cursor-pointer">
+                <Link to={`/tools/${tool.id}`} className="block">
+                  <div className="flex flex-col items-center p-4 rounded-lg border border-border hover:shadow-md transition-all duration-200 bg-white dark:bg-gray-800">
+                    <div className="w-12 h-12 mb-3 rounded-lg overflow-hidden">
+                      {tool.image ? (
+                        <img 
+                          src={tool.image} 
+                          alt={tool.name} 
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-ai-purple to-ai-blue"></div>
+                      )}
+                    </div>
+                    <h3 className="font-medium text-sm text-center line-clamp-1 mb-1">{tool.name}</h3>
+                    <p className="text-xs text-muted-foreground text-center line-clamp-2">{tool.description}</p>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
+          
+          {filteredCategoryTools.length > 24 && (
+            <div className="text-center mt-6">
+              <Button variant="outline" asChild>
+                <Link to={selectedCategory === 'all' ? '/categories' : `/categories/${selectedCategory}`}>
+                  View More Tools
+                </Link>
+              </Button>
+            </div>
+          )}
         </section>
 
         {/* Main Content Grid */}
