@@ -1,4 +1,3 @@
-
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -8,6 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { useParams, Link } from 'react-router-dom';
 import { Calendar, Clock, Heart, Bookmark, Share, MessageSquare, Send, TrendingUp } from 'lucide-react';
 import { useState } from 'react';
+import SmallBanners from '@/components/banners/SmallBanners';
+import HotToolsList from '@/components/tools/HotToolsList';
 
 // Mock article data since blogPosts might not be available
 const mockArticles = [
@@ -374,6 +375,9 @@ const ArticleDetail = () => {
           
           {/* Right Sidebar */}
           <div className="space-y-6">
+            {/* Small Banners */}
+            <SmallBanners />
+            
             {/* Real-time News */}
             <Card>
               <CardContent className="p-6">
@@ -441,6 +445,9 @@ const ArticleDetail = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Hot Tools List */}
+            <HotToolsList />
           </div>
         </div>
       </div>

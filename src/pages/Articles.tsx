@@ -178,7 +178,7 @@ const Articles = () => {
           </p>
           
           {/* Search */}
-          <div className="relative max-w-md mx-auto">
+          <div className="relative max-w-md mb-6">
             <Input
               type="text"
               placeholder="搜索文章..."
