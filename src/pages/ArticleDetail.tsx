@@ -378,6 +378,9 @@ const ArticleDetail = () => {
             {/* Small Banners */}
             <SmallBanners />
             
+            {/* Hot Tools List */}
+            <HotToolsList />
+            
             {/* Real-time News */}
             <Card>
               <CardContent className="p-6">
@@ -445,9 +448,6 @@ const ArticleDetail = () => {
                 </div>
               </CardContent>
             </Card>
-
-            {/* Hot Tools List */}
-            <HotToolsList />
           </div>
         </div>
       </div>

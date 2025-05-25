@@ -224,6 +224,18 @@ const Articles = () => {
 
           {/* Sidebar - 1/4 width */}
           <div className="lg:col-span-1 space-y-6">
+            {/* Search */}
+            <div className="relative">
+              <Input
+                type="text"
+                placeholder="搜索文章..."
+                className="pr-10"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <Search size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            </div>
+
             {/* Hot Articles */}
             <HotArticlesSection />
             
