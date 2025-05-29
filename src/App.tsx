@@ -15,6 +15,9 @@ import NotFound from "./pages/NotFound";
 import ArticleDetail from "./pages/ArticleDetail";
 import SubmitTool from "./pages/SubmitTool";
 import Articles from "./pages/Articles";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import CookiePolicy from "./pages/CookiePolicy";
 
 // Auth Pages
 import Login from "./pages/Auth/Login";
@@ -41,6 +44,11 @@ const App = () => (
           <Route path="/forum/topic/:id" element={<ForumPostDetail />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/submit-tool" element={<SubmitTool />} />
+          
+          {/* Legal Pages */}
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/cookies" element={<CookiePolicy />} />
           
           {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
