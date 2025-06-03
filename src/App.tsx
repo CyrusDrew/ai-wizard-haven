@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,6 +22,12 @@ import CookiePolicy from "./pages/CookiePolicy";
 import AuthPage from "./pages/Auth/AuthPage";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword";
+
+// Import error pages
+import ServerError from "./pages/ServerError";
+import BadGateway from "./pages/BadGateway";
+import ServiceUnavailable from "./pages/ServiceUnavailable";
+import GatewayTimeout from "./pages/GatewayTimeout";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +60,12 @@ const App = () => (
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          
+          {/* Error Pages */}
+          <Route path="/500" element={<ServerError />} />
+          <Route path="/502" element={<BadGateway />} />
+          <Route path="/503" element={<ServiceUnavailable />} />
+          <Route path="/504" element={<GatewayTimeout />} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>

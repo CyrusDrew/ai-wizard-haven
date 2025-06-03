@@ -2,62 +2,100 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MessageSquare, Home, Search, RefreshCw, ArrowLeft } from 'lucide-react';
+import { ReactNode } from 'react';
 import HotToolsList from '@/components/tools/HotToolsList';
 import HotArticlesSection from '@/components/sections/HotArticlesSection';
 
-const NotFound = () => {
+interface ErrorPageLayoutProps {
+  errorCode: string;
+  title: string;
+  description: string;
+  subDescription: string;
+  primaryAction: {
+    label: string;
+    onClick: () => void;
+    icon: ReactNode;
+  };
+  infoCard?: {
+    icon: ReactNode;
+    title: string;
+    items: string[];
+    bgColor: string;
+    textColor: string;
+  };
+  gradientFrom: string;
+  gradientTo: string;
+}
+
+const ErrorPageLayout = ({
+  errorCode,
+  title,
+  description,
+  subDescription,
+  primaryAction,
+  infoCard,
+  gradientFrom,
+  gradientTo
+}: ErrorPageLayoutProps) => {
   return (
     <div className="min-h-screen bg-secondary/20">
       <div className="container mx-auto px-4 py-8">
         {/* Error Header */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-6">
-            <div className="w-24 h-24 bg-gradient-to-r from-ai-purple to-ai-blue rounded-lg flex items-center justify-center text-white font-bold text-4xl">
-              404
+            <div className={`w-24 h-24 bg-gradient-to-r ${gradientFrom} ${gradientTo} rounded-lg flex items-center justify-center text-white font-bold text-4xl`}>
+              {errorCode}
             </div>
           </div>
-          <h1 className="text-4xl font-bold mb-4">页面未找到</h1>
-          <p className="text-xl text-muted-foreground mb-2">
-            抱歉，您访问的页面不存在或已被移除
-          </p>
-          <p className="text-sm text-muted-foreground mb-8">
-            可能的原因：链接已过期、页面已删除或URL输入错误
-          </p>
+          <h1 className="text-4xl font-bold mb-4">{title}</h1>
+          <p className="text-xl text-muted-foreground mb-2">{description}</p>
+          <p className="text-sm text-muted-foreground mb-8">{subDescription}</p>
           
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-3 justify-center mb-12">
-            <Button asChild>
+            <Button onClick={primaryAction.onClick}>
+              {primaryAction.icon}
+              {primaryAction.label}
+            </Button>
+            <Button variant="outline" asChild>
               <Link to="/">
-                <Home size={16} className="mr-2" />
+                <span className="mr-2">🏠</span>
                 返回首页
               </Link>
             </Button>
-            <Button variant="outline" onClick={() => window.history.back()}>
-              <ArrowLeft size={16} className="mr-2" />
-              返回上页
-            </Button>
             <Button variant="outline" asChild>
               <Link to="/forum">
-                <MessageSquare size={16} className="mr-2" />
-                社区求助
+                <span className="mr-2">💬</span>
+                联系客服
               </Link>
             </Button>
-            <Button variant="outline" onClick={() => window.location.reload()}>
-              <RefreshCw size={16} className="mr-2" />
-              刷新页面
-            </Button>
           </div>
+
+          {/* Info Card */}
+          {infoCard && (
+            <Card className={`max-w-md mx-auto mb-8 ${infoCard.bgColor}`}>
+              <CardContent className="p-4">
+                <div className={`flex items-center gap-2 ${infoCard.textColor}`}>
+                  {infoCard.icon}
+                  <div className="text-left">
+                    <p className="font-medium">{infoCard.title}</p>
+                    <ul className="text-sm mt-1 space-y-1">
+                      {infoCard.items.map((item, index) => (
+                        <li key={index}>• {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Hot Content Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Hot Tools */}
           <div className="lg:col-span-1">
             <HotToolsList />
           </div>
-          
-          {/* Hot Articles */}
           <div className="lg:col-span-2">
             <HotArticlesSection showTitle={true} />
           </div>
@@ -102,4 +140,4 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;
+export default ErrorPageLayout;
